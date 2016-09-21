@@ -18,6 +18,11 @@ def main
     random_word_length = game.get_random_word_length
     puts "There are #{random_word_length} letters in your word. Get guessing!"
 
+    puts 'What letter would you like to guess?'
+    print ' > '
+
+    user_guess = game.get_user_guess
+
   # end
 end
 

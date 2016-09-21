@@ -1,5 +1,5 @@
 class Hangman
-  attr_reader :difficulty_level, :guesses
+  attr_reader :difficulty_level, :guesses, :random_word
 
   def initialize
     @difficulty_level = {
@@ -38,11 +38,24 @@ class Hangman
   end
 
   def get_random_word
-    @random_word = get_difficulty_words.sample
+    @random_word = get_difficulty_words.sample.downcase
   end
 
   def get_random_word_length
     @random_word.length
+  end
+
+  def get_user_guess
+    loop do
+      user_guess = gets.chomp.downcase
+      if user_guess.length > 1 || user_guess.empty? || user_guess[/[a-z]+/] != user_guess
+        puts "You can't do that. Try typing one letter at a time."
+        print ' > '
+      else
+        @guesses << user_guess
+        break
+      end
+    end
   end
 
   def show_user_progress
