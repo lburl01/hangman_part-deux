@@ -13,6 +13,10 @@ def main
     difficulty_level = game.get_difficulty_level
 
     random_word = game.get_random_word
+    puts "#{random_word}"
+
+    random_word_length = game.get_random_word_length
+    puts "There are #{random_word_length} letters in your word. Get guessing!"
 
   # end
 end

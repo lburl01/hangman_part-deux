@@ -9,6 +9,7 @@ class Hangman
     }
     @word_length_min = 0
     @word_length_max = 0
+    @random_word = 0
     @guesses = []
   end
 
@@ -37,8 +38,15 @@ class Hangman
   end
 
   def get_random_word
-    random_word = get_difficulty_words.sample
-    puts "#{random_word}"
+    @random_word = get_difficulty_words.sample
+  end
+
+  def get_random_word_length
+    @random_word.length
+  end
+
+  def show_user_progress
+
   end
 
 end
