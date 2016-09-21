@@ -53,8 +53,17 @@ class Hangman
         print ' > '
       else
         @guesses << user_guess
+        puts "#{@guesses}"
         break
       end
+    end
+  end
+
+  def is_guess_in_word?
+    if @random_word.include? @guesses[-1]
+      return true
+    else
+      return false
     end
   end
 
