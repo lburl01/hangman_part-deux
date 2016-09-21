@@ -10,6 +10,7 @@ class Hangman
     @word_length_min = 0
     @word_length_max = 0
     @random_word = 0
+    @user_guess = 0
     @guesses = []
   end
 
@@ -41,30 +42,41 @@ class Hangman
     @random_word = get_difficulty_words.sample.downcase
   end
 
+  def show_word_as_blanks
+    @random_word.each_char { |x| print "_ " }
+  end
+
   def get_random_word_length
     @random_word.length
   end
 
   def get_user_guess
     loop do
-      user_guess = gets.chomp.downcase
-      if user_guess.length > 1 || user_guess.empty? || user_guess[/[a-z]+/] != user_guess
+      @user_guess = gets.chomp.downcase
+      if is_invalid_guess?
         puts "You can't do that. Try typing one letter at a time."
         print ' > '
+      elsif is_guess_a_duplicate?
+        puts "No duplicate letters, please. Be original."
+        break
       else
-        @guesses << user_guess
-        puts "#{@guesses}"
+        @guesses << @user_guess
+        puts "GUESSES: #{@guesses}"
         break
       end
     end
+  end
+
+  def is_invalid_guess?
+    @user_guess.length > 1 || @user_guess.empty? || @user_guess[/[a-z]+/] != @user_guess
   end
 
   def is_guess_in_word?
     @random_word.include? @guesses[-1]
   end
 
-  def show_user_progress
-
+  def is_guess_a_duplicate?
+    @guesses.include?(@user_guess)
   end
 
 end
