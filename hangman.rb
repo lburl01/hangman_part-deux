@@ -1,5 +1,5 @@
 class Hangman
-  attr_reader :difficulty_level, :guesses, :random_word
+  attr_reader :difficulty_level, :guesses, :random_word, :guess_count
 
   def initialize
     @difficulty_level = {
@@ -13,6 +13,7 @@ class Hangman
     @user_guess = 0
     @guesses = []
     @user_progress = 0
+    @guess_count = 0
   end
 
   def get_all_words
@@ -51,22 +52,35 @@ class Hangman
     @random_word.length
   end
 
-  def get_user_guess
+  def make_word_blanks
+    word_array = @random_word.scan(/./)
+    make_blanks = "_" * @random_word.length
+    blanks_in_array = make_blanks.scan(/./)
+    display_blanks = blanks_in_array.join("")
+  end
+
+  def get_user_guess(word_array, display_blanks)
+    make_word_blanks
+
     loop do
       @user_guess = gets.chomp.downcase
-      if is_invalid_guess?
+      if display_blanks.include?("_") == false
+        puts "You win!"
+        exit
+      elsif is_invalid_guess?
         puts "You can't do that. Try typing one letter at a time."
         print ' > '
       elsif is_guess_a_duplicate?
         puts "No duplicate letters, please."
         break
-      else
+      elsif is_guess_in_word?
         @guesses << @user_guess
-        if is_guess_in_word?
-          blanks_and_letters
-          puts "GUESSES: #{@guesses}"
-        end
+        is_guess_in_word?
+        blanks_and_letters(word_array, display_blanks)
         break
+      else
+        @guess_count += 1
+        puts "You're on guess ##{@guess_count} of 8."
       end
     end
   end
@@ -83,17 +97,22 @@ class Hangman
     @guesses.include?(@user_guess)
   end
 
-  def blanks_and_letters
-    word_array = @random_word.scan(/./)
-    make_blanks = "_" * @random_word.length
-    blanks_in_array = make_blanks.scan(/./)
+  def blanks_and_letters(word_array, display_blanks)
+    make_word_blanks
+
     if @guesses.length == 0
       show_blanks = blanks_in_array.join(" ")
       puts "#{show_blanks}"
+
+    # elsif blanks_in_array.include?("_") == false
+    #   puts "You win!"
+    #   exit
+
     else
       word_array.each do |letter|
         letter_index = word_array.index(letter)
       end
+
       @guesses.each do |character|
         word_array.each_with_index do |item, index|
           if character == item
@@ -101,8 +120,10 @@ class Hangman
           end
         end
       end
+
       blanks_and_letters = blanks_in_array.join(" ")
       puts "#{blanks_and_letters}"
+
     end
   end
 
