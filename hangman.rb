@@ -12,6 +12,7 @@ class Hangman
     @random_word = 0
     @user_guess = 0
     @guesses = []
+    @user_progress = 0
   end
 
   def get_all_words
@@ -42,9 +43,9 @@ class Hangman
     @random_word = get_difficulty_words.sample.downcase
   end
 
-  def show_word_as_blanks
-    @random_word.each_char { |x| print "_ " }
-  end
+  # def show_word_as_blanks
+  #   word_as_blanks = @random_word.gsub(/[a-z]/, " _ ")
+  # end
 
   def get_random_word_length
     @random_word.length
@@ -57,11 +58,14 @@ class Hangman
         puts "You can't do that. Try typing one letter at a time."
         print ' > '
       elsif is_guess_a_duplicate?
-        puts "No duplicate letters, please. Be original."
+        puts "No duplicate letters, please."
         break
       else
         @guesses << @user_guess
-        puts "GUESSES: #{@guesses}"
+        if is_guess_in_word?
+          blanks_and_letters
+          puts "GUESSES: #{@guesses}"
+        end
         break
       end
     end
@@ -72,11 +76,34 @@ class Hangman
   end
 
   def is_guess_in_word?
-    @random_word.include? @guesses[-1]
+    @random_word.include? @user_guess
   end
 
   def is_guess_a_duplicate?
     @guesses.include?(@user_guess)
+  end
+
+  def blanks_and_letters
+    word_array = @random_word.scan(/./)
+    make_blanks = "_" * @random_word.length
+    blanks_in_array = make_blanks.scan(/./)
+    if @guesses.length == 0
+      show_blanks = blanks_in_array.join(" ")
+      puts "#{show_blanks}"
+    else
+      word_array.each do |letter|
+        letter_index = word_array.index(letter)
+      end
+      @guesses.each do |character|
+        word_array.each_with_index do |item, index|
+          if character == item
+            blanks_in_array[index] = character
+          end
+        end
+      end
+      blanks_and_letters = blanks_in_array.join(" ")
+      puts "#{blanks_and_letters}"
+    end
   end
 
 end
